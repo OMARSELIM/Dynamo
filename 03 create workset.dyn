@@ -1,0 +1,198 @@
+{
+  "Uuid": "400ecca7-b8dc-4dfe-8657-a91a1cc66d0c",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "03 create workset",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr\r\nclr.AddReference(\"RevitAPI\")\r\nclr.AddReference(\"RevitServices\")\r\nfrom Autodesk.Revit.DB import *\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\n# الوثيقة الحالية\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n# قائمة بأسماء Worksets المطلوبة\r\nrequired_worksets = [\"Z_Temporary\", \"Z_Shared Levels and Grids\", \"Z_Link_ID \"]  # عدّل حسب الحاجة\r\n\r\n# جلب جميع Worksets الحالية\r\ncurrent_worksets = [ws.Name for ws in FilteredWorksetCollector(doc).OfKind(WorksetKind.UserWorkset)]\r\n\r\n# بدء عملية تحرير\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\n# إنشاء Worksets الناقصة\r\nfor workset_name in required_worksets:\r\n    if workset_name not in current_worksets:\r\n        try:\r\n            Workset.Create(doc, workset_name)\r\n            print(f\"تم إنشاء Workset: {workset_name}\")\r\n        except Exception as e:\r\n            print(f\"خطأ أثناء إنشاء {workset_name}: {e}\")\r\n\r\n# إنهاء العملية\r\nTransactionManager.Instance.TransactionTaskDone()\r\n",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "577138507e0545c5bd8df1848f103e91",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "96f451c27aad455d92ab6e7ebc2d63ec",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5138bfe5e14d4cd89896a9e8e7e0d38a",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr\r\nclr.AddReference('RevitAPI')\r\nclr.AddReference('RevitServices')\r\nclr.AddReference('RevitAPIUI')\r\nclr.AddReference('RevitNodes')\r\n\r\nfrom Autodesk.Revit.DB import *\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\n# الحصول على المستند الحالي\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n# وظيفة لتثبيت العنصر (Pin)\r\ndef pin_element(element):\r\n    if not element.Pinned:\r\n        element.Pinned = True\r\n\r\n# جمع الروابط، الشبكات، المستويات، و Scope Boxes\r\ndef collect_and_pin_elements(doc):\r\n    # روابط Revit\r\n    links = FilteredElementCollector(doc).OfClass(RevitLinkInstance).ToElements()\r\n    # الشبكات\r\n    grids = FilteredElementCollector(doc).OfClass(Grid).ToElements()\r\n    # المستويات\r\n    levels = FilteredElementCollector(doc).OfClass(Level).ToElements()\r\n    # Scope Boxes\r\n    scope_boxes = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_VolumeOfInterest).ToElements()\r\n\r\n    elements = links + grids + levels + scope_boxes\r\n\r\n    # بدء المعاملة\r\n    TransactionManager.Instance.EnsureInTransaction(doc)\r\n    for elem in elements:\r\n        pin_element(elem)\r\n    TransactionManager.Instance.TransactionTaskDone()\r\n\r\n# تنفيذ الوظيفة\r\ncollect_and_pin_elements(doc)\r\n",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "cf6b3e3545744a5ebcdd8a83c8ff99e2",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "c23072f483bb4b6aac6f012164361551",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "56a1e42f190644029f831ff0223f2ab2",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr\r\nclr.AddReference('RevitAPI')\r\nclr.AddReference('RevitServices')\r\nfrom Autodesk.Revit.DB import Workset, WorksetKind, FilteredElementCollector\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\n# الحصول على المستند الحالي\r\ndoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument.Document\r\n\r\n# الحصول على الاختيار من المستخدم في Dynamo Player\r\ndiscipline_value = IN[0]  # المستخدم يختار من DropDown في Dynamo Player\r\n\r\n# تحديد اسم Workset بناءً على قيمة الاختيار\r\nif discipline_value == \"معماري\":\r\n    workset_name = \"Workset_معماري\"\r\nelif discipline_value == \"ميكانيكا\":\r\n    workset_name = \"Workset_ميكانيكا\"\r\nelse:\r\n    workset_name = \"Workset_آخر\"\r\n\r\n# الحصول على Worksets الموجودة باستخدام FilteredElementCollector\r\nexisting_worksets = FilteredElementCollector(doc).OfClass(Workset).ToElements()\r\n\r\n# استخراج أسماء الـ Worksets الموجودة\r\nworkset_names = [workset.Name for workset in existing_worksets]\r\n\r\n# التحقق وإنشاء Workset إذا لم يكن موجودًا\r\nif workset_name not in workset_names:\r\n    TransactionManager.Instance.EnsureInTransaction(doc)\r\n    Workset.Create(doc, workset_name)\r\n    TransactionManager.Instance.TransactionTaskDone()\r\n    OUT = f\"تم إنشاء Workset جديد: {workset_name}\"\r\nelse:\r\n    OUT = f\"الـ Workset '{workset_name}' موجود بالفعل.\"\r\n",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "94348a26c60a45649c5e2f6cc59d8289",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "6f1fd38814214f1f9f44edbdd05909a3",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7f2fa01f65394800997d7fbafbf04490",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    }
+  ],
+  "Connectors": [],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.19",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "6.1",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.19.3.6394",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "577138507e0545c5bd8df1848f103e91",
+        "Name": "create workset ",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 576.76950363084825,
+        "Y": 217.75481584205707
+      },
+      {
+        "Id": "cf6b3e3545744a5ebcdd8a83c8ff99e2",
+        "Name": "pin all levels ",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 710.50898283904655,
+        "Y": 495.99301696903274
+      },
+      {
+        "Id": "94348a26c60a45649c5e2f6cc59d8289",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 938.83690895722339,
+        "Y": 192.9041762855023
+      }
+    ],
+    "Annotations": [],
+    "X": -270.62582091048228,
+    "Y": 25.023929377951561,
+    "Zoom": 0.82808993969688771
+  }
+}

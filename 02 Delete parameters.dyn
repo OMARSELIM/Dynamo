@@ -1,0 +1,198 @@
+{
+  "Uuid": "decd2370-3337-49f6-b220-3f989ff46cf1",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "02 Delete parameters",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "import clr\r\n\r\n# Import Revit API\r\nclr.AddReference(\"RevitAPI\")\r\nclr.AddReference(\"RevitAPIUI\")\r\nclr.AddReference(\"RevitServices\")\r\n\r\nfrom Autodesk.Revit.DB import *\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\n# الحصول على المستند الحالي\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n# قائمة بأسماء المعاملات المراد حذفها\r\nparameters_to_remove = [ \"02-Building Name\" ,\"03-Filed Name\" ,\"04-Revision\" ,\"05-Revison Number\"\r\n\r\n,\"LERA - DRAWING LIST\" ,\"Cont. Code\"\r\n\r\n,\"PHASE\" ,\"REV NO\" ,\"REVISION DATE\" ,\"Revision\" ,\"SCALE\" ,\"Manual Scale\"\r\n,\"Sheet Group\"  ,\"REVISION Stamp\" ,\"REVISION Type\" ,\"Revision Sheet text\"\r\n,\"SHEETNUMBER PREFIX\"\r\n,\"sketch Numper \"\r\n,\"F+P Zone Group\" ,\"F+P Discipline\",\"F+P Zone Group\"  ,\"F+P Discipline Group\" ,\"F+P Drawing View\" ,\"F+P Project Number\" ,\"F+P File Name Convention\" ,\"F+P Content Naming Convention\" \r\n,\"CURRENT SHEET COUNT\" ,\"TOTAL SHEET COUNT\"  ,\"ROOM / LOCATION / DEPT.\" \r\n\r\n,\"DRAWING APPROVAL DATE\"\r\n,\"DRAWING APPROVAL NAME\" ,\"DRAWING APPROVER NAME\" \r\n,\"Stage\" , \"LERA - DRAWING LIST\" , \r\n\"Sheet Page_L\" , \"View Group \" ,  \r\n\r\n\r\n\"REVISION DATE\" ,\r\n\"Refer_Revision\" ,\r\n\r\n\"Project Line 1\", \"Project Line 2\", \"Project Line 3\", \"Project Line 4\", \"BIM Manager\", \"BIM Coordinator\",\"Template Version\" ,\"Client Name 1\", \"Client Name 2\", \"Client Name 3\", \"Client Name 4\", \"BIM Manager\", \"Model Status\",  \"Revit Version\",   \"Model Issue Date\",  \"Model Issue Consultant Name\",\"Model Revision\"  ,\"Model Name\"  , \"Training Resource\", \"Template Release Date\", \"Template Release Version\",\"Audit Date\" ,\"Cad Links\",\"Revit Version\"  ,\"Project Status\" ,\"Sheet Package\"  ,\"Sheet Package 2\",\"Submission or Package Title\" ,\"Submission or Package Title 2\",\"Project Information Manager\" ,\"Task Information Manager\" ,\"Model Issue Reason\"   ,\"Design Consultant\"  ,\"Design Discipline\"  ,\"Design Disciplint\" ,\"Design Options\"     ,\"Design Stage\"   ,\"DWG.DESC.1\" ,\"DWG.DESC.2\"  ,\"Revit Links\"  ,\"Series Desciption\"   ,\"File Size\"  ,\"Type of Audit\"   ,\"Path to Keynote Table\" ,\"Subcateries\"   ,\"Warning - Keynoting\"  ,\"Warning - Geometry\"   ,\"Warning - Constraints\"  ,\"Warning - Railings\"  ,\"Warning - Other\"  ,\"Warning - Hosting\" ,\"Warning\" ,\"File Creation Date\"  ,\"Paths to Images\"   ,\"Paths to CAD Links\" ,\"Paths to Revit Links\"   ,\"Model Groups\"  ,\"Model Elements\"  ,\"Sheet Code\" ,\"Revit Version\"  ,\"F+P Sheet Package\" ,\"F+P Sheet Sub-Code\" ,\"01-Title\"  ,\"F+P Building Number\",\"F+P Sub-discipline Group\",\"F+P View Group\",\"F+P View SubGroup\"  ,\"Construction Phase\" ,\"Element Status\"  ,\"LERA - Sheet Series\" ,\"LERA - Sheet Groups\"  ,\"Sheet Group\"  ,\"Sheet Owner\" ,\"Sheet Page\" ,\"TES\"  ,\"View Owner\" ,\"View Group\" ,\"Refer_Date\",\"Sheet Title Line 1\",\"Sheet Title Line 2\",\"Sheet Title Line 3\",\"Sheet Title Line 4\"  \r\n,\"Sketch Date\"  ,\"sketch Number\"\r\n,\"View Group\", \"Youtube clip\" \r\n\r\n, \"VERSION\"  , \"Sheet Number-Prefix\" , \"Sheet Type\"  , \"SHEETNUMBER PREFIX\" , \"Shared_DrawingNo\" \r\n\r\n,\"View Reference BL\",\"View Reference BR\" ,\"View Reference LB\" ,\"View Reference LT\" ,\"View Reference RB\" ,\"View Reference RT\" ,\"View Reference TL\" ,\"View Reference TR\"\r\n  ,\"Ø500mm Flexible\"\r\n,\"Ø450mm Flexible\" ,\"Ø400mm Flexible\" ,\"Ø350mm Flexible\" ,\"Ø300mm Flexible\" ,\"Ø500mm Flexible\" ,\"Ø250mm Flexible\",\"Ø150mm Flexible\"\r\n]\r\n\r\n# بدء معاملة (Transaction)\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\n# البحث عن Project Parameters وحذفها\r\nproject_params = doc.ParameterBindings\r\niterator = project_params.ForwardIterator()\r\n\r\nwhile iterator.MoveNext():\r\n    definition = iterator.Key\r\n    name = definition.Name\r\n    if name in parameters_to_remove:\r\n        try:\r\n            project_params.Remove(definition)\r\n            print(f\"تم حذف المعامل: {name}\")\r\n        except Exception as e:\r\n            print(f\"تعذر حذف المعامل: {name}. الخطأ: {e}\")\r\n\r\n# إنهاء المعاملة\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\n",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "37e5baa5a20642fe865a17f33101399b",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "92ea635997244911bafe6300957a9c30",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a2a80c17bbc446d1a0bf625f10e1a1c0",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# استيراد مكتبات Revit وDynamo\r\nimport clr\r\nclr.AddReference('RevitServices')\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\n\r\n# الحصول على المستند الحالي\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n# إنشاء قائمة لتجميع المعلمات غير المرتبطة\r\nparameters_to_delete = []\r\n\r\n# الوصول إلى خريطة ParameterBindings\r\nbinding_map = doc.ParameterBindings\r\niterator = binding_map.ForwardIterator()\r\niterator.Reset()\r\n\r\n# التحقق من كل Project Parameter\r\nwhile iterator.MoveNext():\r\n    param_def = iterator.Key  # تعريف المعلمة\r\n    binding = iterator.Current  # الربط الخاص بالمعلمة\r\n    \r\n    # التحقق إذا كانت المعلمة غير مرتبطة بأي فئة\r\n    if binding is not None and (binding.Categories is None or binding.Categories.Size == 0):\r\n        parameters_to_delete.append(param_def)  # إضافة المعلمة إلى قائمة الحذف\r\n\r\n# بدء معاملة لحذف المعلمات\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\nfor param_def in parameters_to_delete:\r\n    binding_map.Remove(param_def)  # حذف المعلمة\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\n# إخراج أسماء المعلمات التي تم حذفها\r\nOUT = f\"تم حذف {len(parameters_to_delete)} معلمة غير مرتبطة: {[p.Name for p in parameters_to_delete]}\"\r\n",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "a5131de6bba74b9fb372fb373dfed647",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "7979891665df432c80f0253a3e0e27ed",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "067f2de7fc9d4a059e9b506ce12ae966",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# استيراد مكتبات Revit وDynamo\r\nimport clr\r\nclr.AddReference('RevitServices')\r\nfrom RevitServices.Persistence import DocumentManager\r\n\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\n\r\n# الحصول على المستند الحالي\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n# الوصول إلى خريطة ParameterBindings\r\nbinding_map = doc.ParameterBindings\r\niterator = binding_map.ForwardIterator()\r\niterator.Reset()\r\n\r\n# قائمة لتخزين تفاصيل المعلمات\r\nparameters_info = []\r\n\r\n# التحقق من جميع Project Parameters\r\nwhile iterator.MoveNext():\r\n    param_def = iterator.Key  # تعريف المعلمة\r\n    binding = iterator.Current  # الربط الخاص بالمعلمة\r\n    categories = binding.Categories if binding else None\r\n    category_names = [cat.Name for cat in categories] if categories else []\r\n    \r\n    parameters_info.append({\r\n        \"Name\": param_def.Name,\r\n        \"Categories\": category_names\r\n    })\r\n\r\n# إخراج تفاصيل المعلمات\r\nOUT = parameters_info\r\n",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "00e828e06d774abdbfc62b29ec86bfce",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "9680846e61aa43d186fca99bbd4908f5",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fd1517a462d5460895f5128c04362dd6",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    }
+  ],
+  "Connectors": [],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.19",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "6.1",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.19.3.6394",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "37e5baa5a20642fe865a17f33101399b",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 254.96470851780958,
+        "Y": 216.51063209817943
+      },
+      {
+        "Id": "a5131de6bba74b9fb372fb373dfed647",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -59.084579586998814,
+        "Y": 366.58478005447705
+      },
+      {
+        "Id": "00e828e06d774abdbfc62b29ec86bfce",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 312.7968407918811,
+        "Y": 617.09016160997135
+      }
+    ],
+    "Annotations": [],
+    "X": 189.53660190733794,
+    "Y": 49.625070342915592,
+    "Zoom": 0.69594667359159712
+  }
+}
