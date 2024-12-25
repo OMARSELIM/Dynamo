@@ -1,0 +1,233 @@
+{
+  "Uuid": "dcf5af64-6dca-42f4-9071-aec9b08c9e12",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "08 Visual Revit Warnings ",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Bang.Revit.Elements.WarningTools.GetWarnings@bool",
+      "Id": "b9e9f4f3de9e45b286c043b89486a2fa",
+      "Inputs": [
+        {
+          "Id": "4fc0d663bee44d37814bd4ba866db781",
+          "Name": "toggle",
+          "Description": "Toggle to reset the collection.\n\nbool",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "1916251d58f647a7bc45fab229efa98b",
+          "Name": "Warning Text",
+          "Description": "The description of the warning.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9e58a81bccd440e6857e1feda43eab1d",
+          "Name": "Failing Elements",
+          "Description": "The elements that are failing.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "This node will get the warnings for the current document. Revit 2018 and up only!\n\nWarningTools.GetWarnings (toggle: bool): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Elements.Element.OverrideColorInView@DSCore.Color",
+      "Id": "1c5a4ffc417043fc97d545a3fed68578",
+      "Inputs": [
+        {
+          "Id": "e33fb332ff5840bfb7f5d57bd3feb7ac",
+          "Name": "element",
+          "Description": "Revit.Elements.Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3e7ac444b6f6407d8f599565991170c4",
+          "Name": "color",
+          "Description": "The color to apply to a solid fill on the element.\n\nColor",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f38a4716b76b4795bc749026a9be3529",
+          "Name": "Element",
+          "Description": "Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Override the element's color in the active view.\n\nElement.OverrideColorInView (color: Color): Element"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "e98d0b1901b9467ca3d288aa19663692",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "a0c7c1b5b618412597ce74179e906dcb",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.ColorPalette, CoreNodeModels",
+      "InputValue": {
+        "R": 255,
+        "G": 0,
+        "B": 0,
+        "A": 255
+      },
+      "NodeType": "ColorInputNode",
+      "Id": "9f70ebdbe127466e821007d8484bc934",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "3a12e6cef83b487399d565f4956421d2",
+          "Name": "Color",
+          "Description": "Selected Color.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Select a Color from the palette"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "9e58a81bccd440e6857e1feda43eab1d",
+      "End": "e33fb332ff5840bfb7f5d57bd3feb7ac",
+      "Id": "6d2bef0703b740fdabf8983059a0d49a"
+    },
+    {
+      "Start": "a0c7c1b5b618412597ce74179e906dcb",
+      "End": "4fc0d663bee44d37814bd4ba866db781",
+      "Id": "a4f74fea4fcb497fb09de88c2d1c3fb1"
+    },
+    {
+      "Start": "3a12e6cef83b487399d565f4956421d2",
+      "End": "3e7ac444b6f6407d8f599565991170c4",
+      "Id": "cd5f15220952493a8c4fa7ed7a3637e3"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "Bang!",
+      "Version": "2021.4.3",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "b9e9f4f3de9e45b286c043b89486a2fa"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Automatic",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "WarningTools.GetWarnings",
+        "Id": "b9e9f4f3de9e45b286c043b89486a2fa",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -274.51839087697897,
+        "Y": 30.314914329973135
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Element.OverrideColorInView",
+        "Id": "1c5a4ffc417043fc97d545a3fed68578",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 77.471447732153592,
+        "Y": 181.88948597983892
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "e98d0b1901b9467ca3d288aa19663692",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -561.28998805006586,
+        "Y": -7.4343044774843179
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Color Palette",
+        "Id": "9f70ebdbe127466e821007d8484bc934",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -180.20532407261817,
+        "Y": 180.20532407261817
+      }
+    ],
+    "Annotations": [],
+    "X": 456.41723538240842,
+    "Y": 162.83654134015251,
+    "Zoom": 0.69561644130111489
+  }
+}

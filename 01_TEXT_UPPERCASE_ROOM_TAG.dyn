@@ -1,0 +1,26 @@
+<Workspace Version="0.9.0.3067" X="-86.9364861295566" Y="-61.8662797854091" zoom="0.867977507649019" Name="Home" Description="" RunType="Manual" RunPeriod="100" HasRunWithoutCrash="False">
+  <NamespaceResolutionMap />
+  <Elements>
+    <Dynamo.Nodes.DSFunction guid="702c7dd6-f94a-43cb-bd2d-8b85f9694d0c" type="Dynamo.Nodes.DSFunction" nickname="Element.GetParameterValueByName" x="685.967845005366" y="285.388427786591" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" assembly="RevitNodes.dll" function="Revit.Elements.Element.GetParameterValueByName@string" />
+    <DSRevitNodesUI.ElementsOfCategory guid="f7ac7195-8b5a-47e5-99bb-692cc95c9e62" type="DSRevitNodesUI.ElementsOfCategory" nickname="All Elements of Category" x="374.144716616862" y="262.975791404837" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" />
+    <DSRevitNodesUI.Categories guid="59cd1e29-9f55-4d88-89e4-a1166e157672" type="DSRevitNodesUI.Categories" nickname="Categories" x="194.320677272441" y="257.06105758166" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" index="726:Rooms" />
+    <Dynamo.Nodes.CodeBlockNodeModel guid="9e98324e-9b8b-401a-9497-016cddd637ac" type="Dynamo.Nodes.CodeBlockNodeModel" nickname="Code Block" x="549.953688722787" y="418.215482069273" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" CodeText="&quot;Name&quot;;" ShouldFocus="false" />
+    <Dynamo.Nodes.DSFunction guid="f59689b7-150f-4a41-86d0-51d7a2397022" type="Dynamo.Nodes.DSFunction" nickname="String.ToUpper" x="1090.5" y="297.5" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" assembly="DSCoreNodes.dll" function="DSCore.String.ToUpper@string" />
+    <Dynamo.Nodes.DSFunction guid="0b1428b7-6b90-4c71-b8c4-19d2d8283c01" type="Dynamo.Nodes.DSFunction" nickname="Element.SetParameterByName" x="1263.81757925862" y="236.989221924134" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" assembly="RevitNodes.dll" function="Revit.Elements.Element.SetParameterByName@string,var" />
+  </Elements>
+  <Connectors>
+    <Dynamo.Models.ConnectorModel start="702c7dd6-f94a-43cb-bd2d-8b85f9694d0c" start_index="0" end="f59689b7-150f-4a41-86d0-51d7a2397022" end_index="0" portType="0" />
+    <Dynamo.Models.ConnectorModel start="f7ac7195-8b5a-47e5-99bb-692cc95c9e62" start_index="0" end="702c7dd6-f94a-43cb-bd2d-8b85f9694d0c" end_index="0" portType="0" />
+    <Dynamo.Models.ConnectorModel start="f7ac7195-8b5a-47e5-99bb-692cc95c9e62" start_index="0" end="0b1428b7-6b90-4c71-b8c4-19d2d8283c01" end_index="0" portType="0" />
+    <Dynamo.Models.ConnectorModel start="59cd1e29-9f55-4d88-89e4-a1166e157672" start_index="0" end="f7ac7195-8b5a-47e5-99bb-692cc95c9e62" end_index="0" portType="0" />
+    <Dynamo.Models.ConnectorModel start="9e98324e-9b8b-401a-9497-016cddd637ac" start_index="0" end="702c7dd6-f94a-43cb-bd2d-8b85f9694d0c" end_index="1" portType="0" />
+    <Dynamo.Models.ConnectorModel start="9e98324e-9b8b-401a-9497-016cddd637ac" start_index="0" end="0b1428b7-6b90-4c71-b8c4-19d2d8283c01" end_index="1" portType="0" />
+    <Dynamo.Models.ConnectorModel start="f59689b7-150f-4a41-86d0-51d7a2397022" start_index="0" end="0b1428b7-6b90-4c71-b8c4-19d2d8283c01" end_index="2" portType="0" />
+  </Connectors>
+  <Notes />
+  <Annotations />
+  <Presets />
+  <Cameras>
+    <Camera Name="Background Preview" eyeX="-17" eyeY="24" eyeZ="50" lookX="12" lookY="-13" lookZ="-58" upX="0" upY="1" upZ="0" />
+  </Cameras>
+</Workspace>

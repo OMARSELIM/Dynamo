@@ -1,0 +1,169 @@
+{
+  "Uuid": "c23ffcac-3604-4be7-9fa5-c4a40a0b8e4f",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "duplicate Warnings",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\n\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.DB.Structure import *\r\n\r\nclr.AddReference('RevitAPIUI')\r\nfrom Autodesk.Revit.UI import *\r\n\r\nclr.AddReference('System')\r\nfrom System.Collections.Generic import List\r\n\r\nclr.AddReference('RevitNodes')\r\nimport Revit\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\nclr.ImportExtensions(Revit.Elements)\r\n\r\nclr.AddReference('RevitServices')\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuidoc=DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\n#Do some action in a Transaction\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\n#Dimension From Wall Centerlines?\r\nTD=TaskDialog(\"Duplicate Elements\")\r\nTD.Title=\"Duplicate Elements\"\r\nTD.MainIcon=TaskDialogIcon.TaskDialogIconShield\r\nTD.MainInstruction = \"Do you want to delete duplicated element (Yes) or isolate them to be checked (No)?\"\r\nTD.CommonButtons = TaskDialogCommonButtons.Yes | TaskDialogCommonButtons.No\r\n#TD.ExtraCheckBoxText=\"Isolate Failed Columns?\"\r\nresult=TD.Show()\r\n\r\n#Preparing input from dynamo to revit\r\nelements = UnwrapElement(IN[0])\r\nAV= doc.ActiveView\r\n\r\nif result == TaskDialogResult.Yes:\r\n\tfor e in elements:\r\n\t\ttry:\r\n\t\t\te0=e[0]\r\n\t\t\te1=e[1]\r\n\t\t\tdoc.Delete(e1.Id)\r\n\t\texcept:\r\n\t\t\tpass\r\nelse:\r\n\telements=[item for sublist in elements for item in sublist]\r\n\tL=[i.Id for i in elements]\r\n\tfor e in elements:\r\n\t\tIL= List[ElementId](L)\r\n\t\tAV.IsolateElementsTemporary(IL)\r\n\r\n\r\n\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\nOUT = \"Done\"",
+      "Engine": "IronPython2",
+      "VariableInputPorts": true,
+      "Id": "c8ee8ffe08ea401bbc733f0fbf1c75d5",
+      "Inputs": [
+        {
+          "Id": "4bd52c15d3bd463da51b5cf154634d7a",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "95aed731101d43218e2d091f13180bf6",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Application.Warning.GetFailingElements",
+      "Id": "e5b45619d2b54e529d17dfae5071b638",
+      "Inputs": [
+        {
+          "Id": "580730a8906949fdaaa4f4ec2ca17a33",
+          "Name": "warning",
+          "Description": "Revit.Application.Warning",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "500b745976c240cfa0f783e069456207",
+          "Name": "Element[]",
+          "Description": "The elements that have caused the failure.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Retrieves a list of the elements that have caused the failure.\n\nWarning.GetFailingElements ( ): Element[]"
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.AllWarningsOfType, DSRevitNodesUI",
+      "SelectedIndex": 1,
+      "SelectedString": "There are identical instances in the same place. This will result \nin double counting in schedules. ",
+      "NodeType": "ExtensionNode",
+      "Id": "08ed34850cd44c948b33cb404158f991",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "54d42adefa3147a18458683546e642d5",
+          "Name": "Warnings",
+          "Description": "The selected Warnings",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Returns a list of all instances of the selected warning type."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "500b745976c240cfa0f783e069456207",
+      "End": "4bd52c15d3bd463da51b5cf154634d7a",
+      "Id": "119fd00a4fa647aaaa71208d7e17e194"
+    },
+    {
+      "Start": "54d42adefa3147a18458683546e642d5",
+      "End": "580730a8906949fdaaa4f4ec2ca17a33",
+      "Id": "329a347cd64c4f019961a27efaf73415"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.10.1.3976",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "c8ee8ffe08ea401bbc733f0fbf1c75d5",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1900.8399926497618,
+        "Y": 777.35289478005541
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Warning.GetFailingElements",
+        "Id": "e5b45619d2b54e529d17dfae5071b638",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1533.989960848565,
+        "Y": 795.07402144947162
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "All Warnings of Type",
+        "Id": "08ed34850cd44c948b33cb404158f991",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 987.83800561772409,
+        "Y": 796.26056719199062
+      }
+    ],
+    "Annotations": [],
+    "X": -1074.5651197470993,
+    "Y": -362.19581232588962,
+    "Zoom": 0.80935718288419567
+  }
+}
